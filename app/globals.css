@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@layer base {
+  :root {
+    --foreground: 20 14.3% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 20 14.3% 4.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14.3% 4.1%;
+
+    --primary: 210 100% 50%; /* Синий */
+    --primary-foreground: 60 9.1% 97.8%; /* Светлый цвет для текста на синем фоне */
+
+    --secondary: 210 100% 98%; /* Светлый синий */
+    --secondary-foreground: 210 60% 20%; /* Темный синий для текста на светлом фоне */
+
+    --muted: 210 20% 85%; /* Потускневший синий */
+    --muted-foreground: 210 20% 20%; /* Темный синий для мутированного текста */
+
+    --accent: 210 40% 60%; /* Синий акцент */
+    --accent-foreground: 60 9.8% 10%; /* Темный цвет для акцентного текста */
+
+    --destructive: 0 84.2% 60.2%; /* Если нужно, можно оставить красный или заменить на синий */
+    --destructive-foreground: 60 9.1% 97.8%;
+
+    --border: 210 10% 90%; /* Светло-синий для границ */
+    --input: 210 10% 90%; /* Светло-синий для фона ввода */
+    --ring: 210 90% 50%; /* Синий для кольца фокуса */
+    --radius: 1rem;
+  }
+}
+
+
+* {
+  font-family: var(--font-nunito), sans-serif;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 6px;
+  background: #fff;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #dbdadd;
+  border-radius: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #dbdadd;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

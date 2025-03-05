@@ -1,0 +1,1 @@
+export { getFavouriteDetails } from "./get-favourite-details";
