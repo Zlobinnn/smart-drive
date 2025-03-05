@@ -3,6 +3,7 @@ import { Category, Vehicle } from "@prisma/client";
 import React from "react";
 import { ProductGroupList } from "./products-group-list";
 import { useSet } from "react-use";
+import { useFavouriteStore } from "@/shared/store/favourite";
 
 interface Props {
   className?: string;
@@ -10,24 +11,25 @@ interface Props {
 }
 
 export const ProductList: React.FC<Props> = ({ className, categories }) => {
-  const [favouriteCars, { toggle: setFavouriteCars }] = useSet(new Set<number>([]));
+  // const [favouriteCars, { toggle: setFavouriteCars }] = useSet(new Set<number>([]));
 
-  React.useEffect(() => {
-    console.log(favouriteCars);
-  }, [favouriteCars]);
+  // React.useEffect(() => {
+  //   console.log(favouriteCars);
+  // }, [favouriteCars]);
 
-  React.useEffect(() => {
-    const savedFavourites = localStorage.getItem("favouriteCars");
-    if (savedFavourites) {
-      const parsedFavourites = new Set<number>(JSON.parse(savedFavourites));
-      parsedFavourites.forEach((id) => favouriteCars.add(id));
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   const savedFavourites = localStorage.getItem("favouriteCars");
+  //   if (savedFavourites) {
+  //     const parsedFavourites = new Set<number>(JSON.parse(savedFavourites));
+  //     parsedFavourites.forEach((id) => favouriteCars.add(id));
+  //   }
+  // }, []);
 
-  React.useEffect(() => {
-    localStorage.setItem("favouriteCars", JSON.stringify(Array.from(favouriteCars)));
-  }, [favouriteCars]);
+  // React.useEffect(() => {
+  //   localStorage.setItem("favouriteCars", JSON.stringify(Array.from(favouriteCars)));
+  // }, [favouriteCars]);
 
+  const {fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars} = useFavouriteStore();
 
   return (
     <div className="flex-1">
@@ -40,7 +42,7 @@ export const ProductList: React.FC<Props> = ({ className, categories }) => {
               categoryId={category.id}
               items={category.vehicles}
               favouriteCars={favouriteCars}
-              setFavouriteCars={setFavouriteCars}
+              setFavouriteCars={toggleFavouriteCars}
             />
           )
         ))}

@@ -12,6 +12,7 @@ import { FilterCheckbox } from "../filter-checkbox";
 import { CheckboxFiltersGroup } from "../checkbox-filters-group";
 import { useSet } from "react-use";
 import { Heart } from "lucide-react";
+import { useFavouriteStore } from "@/shared/store/favourite";
 
 interface Props {
     product: Vehicle;
@@ -23,35 +24,13 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
     const router = useRouter();
 
     const [selectedServices, { toggle: setSelectedServices }] = useSet(new Set<number>([]));
-    const [isFavorite, setIsFavorite] = useState(false);
+    const {fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars} = useFavouriteStore();
 
     useEffect(() => {
         console.log(selectedServices);
     }, [selectedServices]);
 
-    useEffect(() => {
-        const savedFavourites = localStorage.getItem("favouriteCars");
-        if (savedFavourites) {
-            const favouriteSet = new Set<number>(JSON.parse(savedFavourites));
-            setIsFavorite(favouriteSet.has(product.id));
-        }
-    }, [product.id]);
-
-    // Обновляем localStorage при добавлении/удалении из избранного
-    const handleFavoriteToggle = () => {
-        const savedFavourites = localStorage.getItem("favouriteCars");
-        const favouriteSet = savedFavourites ? new Set<number>(JSON.parse(savedFavourites)) : new Set<number>();
-
-        if (favouriteSet.has(product.id)) {
-            favouriteSet.delete(product.id);
-            setIsFavorite(false);
-        } else {
-            favouriteSet.add(product.id);
-            setIsFavorite(true);
-        }
-
-        localStorage.setItem("favouriteCars", JSON.stringify(Array.from(favouriteSet)));
-    };
+    
 
     const totalServicesPrice = services!.reduce((acc, service) => acc + (selectedServices.has(service.id) ? service.price : 0), 0);
 
@@ -89,11 +68,11 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                         <div className="flex gap-2 mt-10">
                             <Button variant={"secondary"}
                                 // onClick={() => setIsFavorite(!isFavorite)}
-                                onClick={handleFavoriteToggle}
+                                onClick={() => toggleFavouriteCars(product.id)}
                                 // className="w-[55px] h-[55px] flex items-center justify-center border border-gray-300 rounded-[18px] bg-transparent hover:bg-gray-100 transition"
                                 className="w-[55px] h-[55px]"
                             >
-                                <Heart size={20} className={isFavorite ? "fill-red-500 text-red-500" : ""} />
+                                <Heart size={20} className={(favouriteCars.some(car => car.id === product.id)) ? "fill-red-500 text-red-500" : ""} />
                             </Button>
 
                             <Button className="h-[55px] px-10 text-base rounded-[18px] flex-1">

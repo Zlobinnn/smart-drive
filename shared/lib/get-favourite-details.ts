@@ -18,7 +18,6 @@ export type FavouriteItem = {
     doors: number;
     driveType: string;
     color: string;
-    services: { id: number; name: string; price: number }[];
 };
 
 interface ReturnProps {
@@ -26,30 +25,25 @@ interface ReturnProps {
 }
 
 export const getFavouriteDetails = (
-    data: Cart & { items: (CartItem & { vehicle: Vehicle; services: Service[] })[] }
+    data: Cart & { items: Vehicle[]}
 ): ReturnProps => {
     if (!data) return { items: [] };
 
     return { items: data.items.map((item) => ({
-        id: item.vehicle.id,
-        name: item.vehicle.name,
-        price: item.vehicle.price,
-        imageUrl: item.vehicle.imageUrl,
-        description: item.vehicle.description,
-        year: item.vehicle.year,
-        mileage: item.vehicle.mileage,
-        transmission: item.vehicle.transmission,
-        fuelType: item.vehicle.fuelType,
-        engineSize: item.vehicle.engineSize,
-        horsepower: item.vehicle.horsepower,
-        seats: item.vehicle.seats,
-        doors: item.vehicle.doors,
-        driveType: item.vehicle.driveType,
-        color: item.vehicle.color,
-        services: item.services.map((service) => ({
-            id: service.id,
-            name: service.name,
-            price: service.price,
-        })),
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        imageUrl: item.imageUrl,
+        description: item.description,
+        year: item.year,
+        mileage: item.mileage,
+        transmission: item.transmission,
+        fuelType: item.fuelType,
+        engineSize: item.engineSize,
+        horsepower: item.horsepower,
+        seats: item.seats,
+        doors: item.doors,
+        driveType: item.driveType,
+        color: item.color,
     })) };
 };

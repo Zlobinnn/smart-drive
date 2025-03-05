@@ -10,30 +10,32 @@ import { useProducts } from "@/shared/hooks/use-products";
 
 interface Props {
     className?: string;
-    setProductsLength: (length: number) => void;
+    favouriteProducts: Vehicle[];
+    loading: boolean;
+    toggleFavouriteCars: (id: number) => void;
 }
 
-export const FavouriteDrawerItemsList: React.FC<Props> = ({ className, setProductsLength }) => {
-    const [favouriteCars, { toggle: setFavouriteCars }] = useSet(new Set<number>([]));
-    const { products, loading } = useProducts();
+export const FavouriteDrawerItemsList: React.FC<Props> = ({ className, favouriteProducts, loading, toggleFavouriteCars }) => {
+    // const [favouriteCars, { toggle: setFavouriteCars }] = useSet(new Set<number>([]));
+    // const { products, loading } = useProducts();
 
-    React.useEffect(() => {
-        const savedFavourites = localStorage.getItem("favouriteCars");
-        if (savedFavourites) {
-            const parsedFavourites = new Set<number>(JSON.parse(savedFavourites));
-            parsedFavourites.forEach((id) => favouriteCars.add(id));
-        }
-    }, []);
+    // React.useEffect(() => {
+    //     const savedFavourites = localStorage.getItem("favouriteCars");
+    //     if (savedFavourites) {
+    //         const parsedFavourites = new Set<number>(JSON.parse(savedFavourites));
+    //         parsedFavourites.forEach((id) => favouriteCars.add(id));
+    //     }
+    // }, []);
 
-    React.useEffect(() => {
-        localStorage.setItem("favouriteCars", JSON.stringify(Array.from(favouriteCars)));
-      }, [favouriteCars]);
+    // React.useEffect(() => {
+    //     localStorage.setItem("favouriteCars", JSON.stringify(Array.from(favouriteCars)));
+    //   }, [favouriteCars]);
 
-    const favouriteProducts = products.filter(product => favouriteCars.has(product.id));
+    // const favouriteProducts = products.filter(product => favouriteCars.has(product.id));
     
-    React.useEffect(() => {
-        setProductsLength(favouriteProducts.length);
-    }, [favouriteProducts.length]);
+    // React.useEffect(() => {
+    //     setProductsLength(favouriteProducts.length);
+    // }, [favouriteProducts.length]);
 
     if (loading) {
         return <div className={className}>
@@ -70,8 +72,8 @@ export const FavouriteDrawerItemsList: React.FC<Props> = ({ className, setProduc
 
                     </Link>
                     <span>
-                        <Button variant="ghost" className="cursor-pointer hover:text-primary hover:bg-0" onClick={() => setFavouriteCars(product.id)}>
-                            <X size={20} />
+                        <Button variant="ghost" className="cursor-pointer hover:text-primary hover:bg-0">
+                            <X size={20} onClick={() => toggleFavouriteCars(product.id)} />
                         </Button>
                     </span>
                 </div>

@@ -20,7 +20,7 @@ export const useFavouriteStore = create<FavouriteState>()((set, get) => ({
         try {
             set({ loading: true, error: false });
             const data = await Api.favouriteCars.fetchFavouriteCars();
-            set({favouriteCars: getFavouriteDetails(data)});
+            set({favouriteCars: data.items});
         } catch (error) {
             console.error(error);
             set({ error: true });
@@ -28,5 +28,16 @@ export const useFavouriteStore = create<FavouriteState>()((set, get) => ({
             set({ loading: false });
         }
     },
-    toggleFavouriteCars: (id: number) => {},
+    toggleFavouriteCars: async (id: number) => {
+        try {
+            set({ loading: true, error: false });
+            const data = await Api.favouriteCars.toggleFavouriteCars(id);
+            set({favouriteCars: data.items});
+        } catch (error) {
+            console.error(error);
+            set({ error: true });
+        } finally {
+            set({ loading: false });
+        }
+    },
 }));

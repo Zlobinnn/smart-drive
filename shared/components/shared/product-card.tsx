@@ -52,7 +52,7 @@ export const ProductCard: React.FC<Props> = ({
     doors,
     driveType,
     color }) => {
-
+        
     return (
         <div className={className}>
             <Link href={`/product/${id}`}>
@@ -65,58 +65,57 @@ export const ProductCard: React.FC<Props> = ({
                     {/* {discription} */}
                 </p>
 
-                <div className="mt-3 grid grid-cols-7 gap-4 text-xs text-gray-500">
-                    <div className="flex flex-col items-center gap-1">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                            <Calendar size={20} />
-                        </div>
-                        <span className="font-medium">{year}</span>
+            </Link>
+            <div className="mt-3 grid grid-cols-7 gap-4 text-xs text-gray-500">
+                <div className="flex flex-col items-center gap-1" title="Год выпуска">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                        <Calendar size={20} />
                     </div>
-
-                    <div className="flex flex-col items-center gap-1">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                            <Settings size={20} />
-                        </div>
-                        <span className="font-medium">{transmission}</span>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-1">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                            <Droplet size={20} />
-                        </div>
-                        <span className="font-medium">{fuelType}</span>
-                    </div>
-
-                    {engineSize != 0 && (<div className="flex flex-col items-center gap-1">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                            <Cpu size={20} />
-                        </div>
-                        <span className="font-medium">{engineSize} л</span>
-                    </div>)}
-
-                    <div className="flex flex-col items-center gap-1">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                            <Zap size={20} />
-                        </div>
-                        <span className="font-medium">{horsepower} л.с.</span>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-1">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                            <User size={20} />
-                        </div>
-                        <span className="font-medium">{seats}</span>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-1">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                            <CircleDotDashed size={20} />
-                        </div>
-                        <span className="font-medium">{driveType}</span>
-                    </div>
+                    <span className="font-medium">{year}</span>
                 </div>
 
-            </Link>
+                <div className="flex flex-col items-center gap-1" title="Коробка передач">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                        <Settings size={20} />
+                    </div>
+                    <span className="font-medium">{transmission}</span>
+                </div>
+
+                <div className="flex flex-col items-center gap-1" title="Тип топлива">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                        <Droplet size={20} />
+                    </div>
+                    <span className="font-medium">{fuelType}</span>
+                </div>
+
+                {engineSize != 0 && (<div className="flex flex-col items-center gap-1" title="Объем двигателя">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                        <Cpu size={20} />
+                    </div>
+                    <span className="font-medium">{engineSize} л</span>
+                </div>)}
+
+                <div className="flex flex-col items-center gap-1" title="Мощность двигателя">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                        <Zap size={20} />
+                    </div>
+                    <span className="font-medium">{horsepower} л.с.</span>
+                </div>
+
+                <div className="flex flex-col items-center gap-1" title="Количество мест">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                        <User size={20} />
+                    </div>
+                    <span className="font-medium">{seats}</span>
+                </div>
+
+                <div className="flex flex-col items-center gap-1" title="Привод">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                        <CircleDotDashed size={20} />
+                    </div>
+                    <span className="font-medium">{driveType}</span>
+                </div>
+            </div>
             <div className="flex justify-between items-center mt-4">
                 <span className="text-[20px]">
                     от <b>${price}</b>

@@ -19,13 +19,19 @@ import { FavouriteDrawerItemsList } from "./favourite-drawer-items-list";
 import { useProducts } from "@/shared/hooks/use-products";
 import { Api } from "@/shared/services/api-client";
 import { Vehicle } from "@prisma/client";
+import { useFavouriteStore } from "@/shared/store/favourite";
 
 interface Props {
     className?: string;
 }
 
 export const FavouriteDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children, className }) => {
-    const [productsLength, setProductsLength] = React.useState(0);
+    // const [fetchFavouriteCars, favouriteCars, loading] = useFavouriteStore((state) => [state.fetchFavouriteCars, state.favouriteCars, state.loading]);
+    const {fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars} = useFavouriteStore();
+
+    React.useEffect(() => {
+        fetchFavouriteCars();
+    }, []);
 
     const getCarWord = (count: number) => {
         if (count % 10 === 1 && count % 100 !== 11) return "автомобиль";
@@ -34,16 +40,16 @@ export const FavouriteDrawer: React.FC<React.PropsWithChildren<Props>> = ({ chil
     };
 
     return (
-        <Sheet onOpenChange={(open) => !open && window.location.reload()}>
+        <Sheet onOpenChange={(open) => !open}>
             <SheetTrigger asChild>{children}</SheetTrigger>
             <SheetContent className="flex flex-col pb-0 bg-white">
                 <SheetHeader>
                     <SheetTitle>
-                        В избранном <span className="font-bold">{productsLength} {getCarWord(productsLength)}</span>
+                        В избранном <span className="font-bold">{favouriteCars.length} {getCarWord(favouriteCars.length)}</span>
                     </SheetTitle>
                 </SheetHeader>
 
-                <FavouriteDrawerItemsList setProductsLength={setProductsLength} />
+                <FavouriteDrawerItemsList favouriteProducts={favouriteCars} loading={loading} toggleFavouriteCars={toggleFavouriteCars}/>
             </SheetContent>
         </Sheet>
     );
