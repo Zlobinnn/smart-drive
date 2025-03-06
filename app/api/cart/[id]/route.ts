@@ -6,10 +6,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         const { id } = await params;
         const vehicleId = Number(id);
         const token = req.cookies.get('cartToken')?.value;
-
-        // if (!token) {
-        //     return NextResponse.json({error: 'Token not found'});
-        // }
+    
+        if (!token) {
+            return NextResponse.json({error: 'Token not found'});
+        }
 
         const userCart = await prisma.cart.findFirst({
             where: { token },
