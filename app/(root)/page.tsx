@@ -5,13 +5,10 @@ import { prisma } from "@/prisma/prisma-client";
 import { useSet } from "react-use";
 import React from "react";
 import { ProductList } from "@/shared/components/shared/product-list";
+import { findCars, GetSearchParams } from "@/shared/lib/find-cars";
 
-export default async function Home() {
-  const categories = await prisma.category.findMany({
-    include: {
-      vehicles: true,
-    }
-  });
+export default async function Home({searchParams}: {searchParams: GetSearchParams}) {
+  const categories = await findCars(searchParams);
 
   return (
     <>

@@ -36,7 +36,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
                 title="Тип трансмиссии"
                 className="mt-5"
                 limit={2}
-                items={[{ text: "Механика", value: "mechanic" }, { text: "Автомат", value: "automatic" }]}
+                items={[{ text: "Механика", value: "Механика" }, { text: "Автомат", value: "Автомат" }]}
                 loading={loading}
                 onClickCheckbox={filters.setTransmision}
                 selected={filters.transmission}
@@ -47,11 +47,11 @@ export const Filters: React.FC<Props> = ({ className }) => {
             <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
                 <p className="font-bold mb-3">Цена от и до:</p>
                 <div className="flex gap-3 mb-5">
-                    <Input type="number" placeholder="0" min={0} max={1000} value={String(filters.prices.priceFrom)} onChange={(e) => filters.setPrices("priceFrom", Number(e.target.value))} />
-                    <Input type="number" min={20} max={1000} placeholder="1000" value={String(filters.prices.priceTo)} onChange={(e) => filters.setPrices("priceTo", Number(e.target.value))} />
+                    <Input type="number" placeholder="50" min={50} max={120} value={String(filters.prices.priceFrom)} onChange={(e) => filters.setPrices("priceFrom", Number(e.target.value))} />
+                    <Input type="number" min={60} max={120} placeholder="120" value={String(filters.prices.priceTo)} onChange={(e) => filters.setPrices("priceTo", Number(e.target.value))} />
                 </div>
 
-                <RangeSlider min={0} max={1000} step={10} value={[filters.prices.priceFrom || 0, filters.prices.priceTo || 1000]}
+                <RangeSlider min={50} max={120} step={5} value={[filters.prices.priceFrom || 50, filters.prices.priceTo || 120]}
                     onValueChange={updatePrices}
                 />
             </div>
