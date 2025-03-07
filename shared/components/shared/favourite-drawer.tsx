@@ -11,7 +11,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/shared/components/ui/sheet";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, FolderOpen, PackageOpen } from "lucide-react";
 import { Button } from "../ui";
 import Link from "next/link";
 import { useSet } from "react-use";
@@ -50,6 +50,7 @@ export const FavouriteDrawer: React.FC<React.PropsWithChildren<Props>> = ({ chil
                 </SheetHeader>
 
                 <FavouriteDrawerItemsList favouriteProducts={favouriteCars} loading={loading} toggleFavouriteCars={toggleFavouriteCars}/>
+                {favouriteCars.length === 0 && !loading && <PackageOpen size={60} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>}
             </SheetContent>
         </Sheet>
     );

@@ -43,19 +43,19 @@ export const brands = [
 export const services = [
     {
         name: 'Детское автокресло',
-        price: 500,
+        price: 10,
     },
     {
         name: 'Держатель для телефона',
-        price: 200,
+        price: 5,
     },
     {
         name: 'Дополнительный водитель',
-        price: 1000,
+        price: 15,
     },
     {
         name: 'Помощь на дороге',
-        price: 800,
+        price: 50,
     },
 ].map((service, index) => ({ id: index + 1, ...service }));
 

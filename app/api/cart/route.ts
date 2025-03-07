@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     try {
-        const token = req.cookies.get('cartToken')?.value;
+        let token = req.cookies.get('cartToken')?.value;
 
         if (!token) {
-            return NextResponse.json({ totalAmount: 0, items: [] });
+            token = crypto.randomUUID();
         }
 
-        const userCart = await prisma.cart.findFirst({
+        let userCart = await prisma.cart.findFirst({
             where: {
                 OR: [
                     { token, },
@@ -20,6 +20,29 @@ export async function GET(req: NextRequest) {
                 },
             }
         });
+
+        if (!userCart) {
+            userCart = await prisma.cart.create({
+                data: {
+                    token,
+                },
+                include: { items: true }
+            });
+        }
+
+        const response = NextResponse.json(userCart);
+
+        if (!req.cookies.get('cartToken')) {
+            response.cookies.set('cartToken', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7,
+            });
+        }
+
+        return response;
 
         // TODO
         return NextResponse.json(userCart);

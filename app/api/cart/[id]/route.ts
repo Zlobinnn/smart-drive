@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
         const userCart = await prisma.cart.findFirst({
             where: { token },
-            include: { items: true } // Загружаем массив машин
+            include: { items: true }
         });
 
         if (!userCart) {
