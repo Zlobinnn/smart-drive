@@ -14,6 +14,7 @@ import { useSet } from "react-use";
 import { CircleDotDashed, Heart } from "lucide-react";
 import { useFavouriteStore } from "@/shared/store/favourite";
 import { Calendar, Settings, Droplet, Cpu, Zap, User, MapPin } from "lucide-react";
+import { useOrderStore } from "@/shared/store/useOrderStore";
 
 interface Props {
     product: Vehicle;
@@ -31,7 +32,24 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
         console.log(selectedServices);
     }, [selectedServices]);
 
+    const { setOrder } = useOrderStore();
 
+    const handleBooking = () => {
+        const selectedServicesArray = services!.filter((service) => selectedServices.has(service.id));
+    
+        setOrder({
+            car: {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+            },
+            services: selectedServicesArray,
+            totalPrice: product.price + totalServicesPrice,
+        });
+    
+        router.push("/checkout");
+    };
 
     const totalServicesPrice = services!.reduce((acc, service) => acc + (selectedServices.has(service.id) ? service.price : 0), 0);
 
@@ -127,7 +145,7 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                                 <Heart size={20} className={(favouriteCars.some(car => car.id === product.id)) ? "fill-red-500 text-red-500" : ""} />
                             </Button>
 
-                            <Button className="h-[55px] px-10 text-base rounded-[18px] flex-1">
+                            <Button className="h-[55px] px-10 text-base rounded-[18px] flex-1" onClick={handleBooking}>
                                 Арендовать за ${product.price + totalServicesPrice}
                             </Button>
                         </div>

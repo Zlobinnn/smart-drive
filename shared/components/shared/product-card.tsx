@@ -52,7 +52,7 @@ export const ProductCard: React.FC<Props> = ({
     doors,
     driveType,
     color }) => {
-        
+    
     return (
         <div className={className}>
             <Link href={`/product/${id}`}>
