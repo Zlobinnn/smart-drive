@@ -11,8 +11,9 @@ import { Button } from "@/shared/components/ui";
 import { FilterCheckbox } from "../filter-checkbox";
 import { CheckboxFiltersGroup } from "../checkbox-filters-group";
 import { useSet } from "react-use";
-import { Heart } from "lucide-react";
+import { CircleDotDashed, Heart } from "lucide-react";
 import { useFavouriteStore } from "@/shared/store/favourite";
+import { Calendar, Settings, Droplet, Cpu, Zap, User, MapPin } from "lucide-react";
 
 interface Props {
     product: Vehicle;
@@ -24,13 +25,13 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
     const router = useRouter();
 
     const [selectedServices, { toggle: setSelectedServices }] = useSet(new Set<number>([]));
-    const {fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars} = useFavouriteStore();
+    const { fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars } = useFavouriteStore();
 
     useEffect(() => {
         console.log(selectedServices);
     }, [selectedServices]);
 
-    
+
 
     const totalServicesPrice = services!.reduce((acc, service) => acc + (selectedServices.has(service.id) ? service.price : 0), 0);
 
@@ -49,6 +50,57 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                         </DialogTitle>
 
                         <p className="text-gray-400 mt-2">{product.description}</p>
+
+                        <div className="mt-3 grid grid-cols-7 gap-4 text-xs text-gray-500">
+                            <div className="flex flex-col items-center gap-1" title="Год выпуска">
+                                <div className="p-2 bg-gray-50 rounded-lg">
+                                    <Calendar size={20} />
+                                </div>
+                                <span className="font-medium">{product.year}</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1" title="Коробка передач">
+                                <div className="p-2 bg-gray-50 rounded-lg">
+                                    <Settings size={20} />
+                                </div>
+                                <span className="font-medium">{product.transmission}</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1" title="Тип топлива">
+                                <div className="p-2 bg-gray-50 rounded-lg">
+                                    <Droplet size={20} />
+                                </div>
+                                <span className="font-medium">{product.fuelType}</span>
+                            </div>
+
+                            {product.engineSize != 0 && (<div className="flex flex-col items-center gap-1" title="Объем двигателя">
+                                <div className="p-2 bg-gray-50 rounded-lg">
+                                    <Cpu size={20} />
+                                </div>
+                                <span className="font-medium">{product.engineSize} л</span>
+                            </div>)}
+
+                            <div className="flex flex-col items-center gap-1" title="Мощность двигателя">
+                                <div className="p-2 bg-gray-50 rounded-lg">
+                                    <Zap size={20} />
+                                </div>
+                                <span className="font-medium">{product.horsepower} л.с.</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1" title="Количество мест">
+                                <div className="p-2 bg-gray-50 rounded-lg">
+                                    <User size={20} />
+                                </div>
+                                <span className="font-medium">{product.seats}</span>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1" title="Привод">
+                                <div className="p-2 bg-gray-50 rounded-lg">
+                                    <CircleDotDashed size={20} />
+                                </div>
+                                <span className="font-medium">{product.driveType}</span>
+                            </div>
+                        </div>
 
                         <div className="mt-5 grid gap-3">
                             <p>Может пригодиться:</p>
