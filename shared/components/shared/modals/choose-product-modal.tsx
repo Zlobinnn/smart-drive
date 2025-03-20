@@ -26,17 +26,11 @@ interface Props {
 export const ChooseProductModal: React.FC<Props> = ({ product, className, services }) => {
     const router = useRouter();
 
-    const [selectedServices, { toggle: setSelectedServices }] = useSet(new Set<number>([]));
     const { fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars } = useFavouriteStore();
-
-    useEffect(() => {
-        console.log(selectedServices);
-    }, [selectedServices]);
 
     const { setOrder } = useOrderStore();
 
     const handleBooking = () => {
-        const selectedServicesArray = services!.filter((service) => selectedServices.has(service.id));
     
         setOrder({
             car: {
@@ -45,18 +39,16 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                 price: product.price,
                 imageUrl: product.imageUrl,
             },
-            services: selectedServicesArray,
-            totalPrice: product.price + totalServicesPrice,
+            totalPrice: product.price,
         });
     
         router.push("/checkout");
     };
 
-    const totalServicesPrice = services!.reduce((acc, service) => acc + (selectedServices.has(service.id) ? service.price : 0), 0);
 
     return (
         <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
-            <DialogContent className={cn("p-0 w-[1060px] max-w-[1060px] h-[500px] bg-white overflow-hidden", className)}>
+            <DialogContent className={cn("p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden", className)}>
 
                 <div className="flex flex-1">
                     <ProductImage src={product.imageUrl} />
@@ -73,19 +65,8 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                         <CarInfo product={product}/>
 
 
-                        <div className="mt-5 grid gap-3">
-                            <p>Может пригодиться:</p>
-                            {services?.map((service) => (
-                                <div key={service.id} className="flex justify-between items-center">
-                                    <FilterCheckbox
-                                        text={service.name}
-                                        value={String(service.id)}
-                                        checked={selectedServices.has(service.id)}
-                                        onCheckedChange={() => setSelectedServices(service.id)}
-                                    />
-                                    <span className="text-gray-500">${service.price}</span>
-                                </div>
-                            ))}
+                        <div className="mt-5 flex justify-center">
+                            <Calendar className="w-full"/>
                         </div>
 
                         <div className="flex gap-2 mt-10">
@@ -99,7 +80,7 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                             </Button>
 
                             <Button className="h-[55px] px-10 text-base rounded-[18px] flex-1" onClick={handleBooking}>
-                                Арендовать за ${product.price + totalServicesPrice}
+                                Арендовать за ${product.price}
                             </Button>
                         </div>
 

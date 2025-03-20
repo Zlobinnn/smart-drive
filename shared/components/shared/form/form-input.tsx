@@ -29,7 +29,7 @@ export const FormInput: React.FC<Props> = ({ name, label, required, className, .
             )}
 
             <div className="relative">
-                <Input className="h-12 text-md" {...register(name)} {...props} />
+                <Input className="h-12 text-md placeholder:text-gray-400" {...register(name)} {...props} />
                 {value && <button onClick={onClickClear} className="absolute right-4 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 cursor-pointer">
                     <X className="h-5 w-5" />
                 </button>}

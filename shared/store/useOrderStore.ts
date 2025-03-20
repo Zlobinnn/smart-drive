@@ -7,7 +7,6 @@ interface Order {
         price: number;
         imageUrl: string;
     };
-    services: { id: number; name: string; price: number }[];
     totalPrice: number;
 }
 

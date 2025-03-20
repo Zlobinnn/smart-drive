@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 
-import { Container, Title } from "@/shared/components/shared";
+import { Container, FilterCheckbox, Title } from "@/shared/components/shared";
 import { FormInput } from "@/shared/components/shared/form/form-input";
 import { WhiteBlock } from "@/shared/components/shared/white-block";
 import { Button, Input } from "@/shared/components/ui";
@@ -15,11 +15,19 @@ import React from "react";
 import { set } from "zod";
 import { useSession } from "next-auth/react";
 import { Api } from "@/shared/services/api-client";
+import { useServices } from "@/shared/hooks/use-services";
+import { useSet } from "react-use";
 
 export default function Checkout() {
     const [submitting, setSubmitting] = React.useState(false);
     const { order } = useOrderStore();
     const { data: session } = useSession();
+    const [selectedServices, { toggle: setSelectedServices }] = useSet(new Set<number>([]));
+    const {services, loading} = useServices();
+
+    const selectedServicesArray = services!.filter((service) => selectedServices.has(service.id));
+    const totalServicesPrice = services!.reduce((acc, service) => acc + (selectedServices.has(service.id) ? service.price : 0), 0);
+
 
     const form = useForm<CheckoutFormValues>({
         resolver: zodResolver(checkoutFormSchema),
@@ -98,8 +106,18 @@ export default function Checkout() {
                                 </div>
                             </WhiteBlock>
 
-                            <WhiteBlock>
-                                
+                            <WhiteBlock title="3. Дополнительные услуги">
+                                {services?.map((service) => (
+                                    <div key={service.id} className="flex justify-between items-center mb-2">
+                                        <FilterCheckbox
+                                            text={service.name}
+                                            value={String(service.id)}
+                                            checked={selectedServices.has(service.id)}
+                                            onCheckedChange={() => setSelectedServices(service.id)}
+                                        />
+                                        <span className="text-gray-500">${service.price}</span>
+                                    </div>
+                                ))}
                             </WhiteBlock>
                         </div>
 
@@ -107,7 +125,7 @@ export default function Checkout() {
                             <WhiteBlock className="p-6 sticky top-4">
                                 <div className="flex flex-col gap-1">
                                     <span className="text-xl">Итого:</span>
-                                    <span className="text-[28px] font-extrabold">${order ? order.totalPrice : 0}</span>
+                                    <span className="text-[28px] font-extrabold">${order ? order.car.price + totalServicesPrice : 0}</span>
                                 </div>
 
                                 <div className="flex my-4">
@@ -123,7 +141,7 @@ export default function Checkout() {
                                         Стоимость услуг:
                                         <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
                                     </span>
-                                    <span className="font-bold text-lg">${order?.services.reduce((acc, service) => acc + service.price, 0)}</span>
+                                    <span className="font-bold text-lg">${totalServicesPrice}</span>
                                 </div>
 
                                 <Button type="submit" className="w-full h-14 rounded-2xl mt-6 text-base font-bold" loading={submitting}>Перейти к оплате</Button>
