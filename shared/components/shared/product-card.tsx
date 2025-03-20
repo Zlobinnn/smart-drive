@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Title } from "./title";
 import { Button } from "../ui/button";
-import { CircleDot, CircleDotDashed, Heart, Plus } from "lucide-react";
+import { CircleDot, CircleDotDashed, Gauge, Heart, Plus } from "lucide-react";
 import { useSet } from "react-use";
 import { FilterCheckbox } from "./filter-checkbox";
 import { Calendar, Settings, Droplet, Cpu, Zap, User, MapPin } from "lucide-react";
@@ -97,7 +97,7 @@ export const ProductCard: React.FC<Props> = ({
 
                 <div className="flex flex-col items-center gap-1" title="Мощность двигателя">
                     <div className="p-2 bg-gray-50 rounded-lg">
-                        <Zap size={20} />
+                        <Gauge size={20} />
                     </div>
                     <span className="font-medium">{horsepower} л.с.</span>
                 </div>

@@ -9,9 +9,17 @@ import { Button, Input } from "@/shared/components/ui";
 import { useOrderStore } from "@/shared/store/useOrderStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkoutFormSchema, CheckoutFormValues } from "@/shared/components/shared/schemas/checkout-form-scemas";
+import { createOrder } from "@/app/actions";
+import { toast } from "sonner";
+import React from "react";
+import { set } from "zod";
+import { useSession } from "next-auth/react";
+import { Api } from "@/shared/services/api-client";
 
 export default function Checkout() {
+    const [submitting, setSubmitting] = React.useState(false);
     const { order } = useOrderStore();
+    const { data: session } = useSession();
 
     const form = useForm<CheckoutFormValues>({
         resolver: zodResolver(checkoutFormSchema),
@@ -24,8 +32,37 @@ export default function Checkout() {
         }
     });
 
-    const onSubmit: SubmitHandler<CheckoutFormValues> = (data) => {
-        console.log(data);
+    React.useEffect(() => {
+        async function fetchUserInfo() {
+            const data = await Api.auth.getMe();
+            const [firstName, lastName] = data.fullName.split(" ");
+            form.setValue("firstName", firstName);
+            form.setValue("lastName", lastName);
+            form.setValue("email", data.email);
+        }
+
+        if (session) {
+            fetchUserInfo();
+        }
+    }, [session]);
+
+    const onSubmit: SubmitHandler<CheckoutFormValues> = async (data) => {
+        try {
+            setSubmitting(true);
+            const url = await createOrder(data);
+
+            toast.error("Заказ успешно создан", { icon: "✅" });
+
+            if (url) {
+                location.href = url;
+            }
+        } catch (error) {
+            console.error(error);
+            setSubmitting(false);
+            toast.error("Что-то пошло не так", { icon: "🚨" });
+        } finally {
+            // setSubmitting(false);
+        }
     };
 
     return (
@@ -60,6 +97,10 @@ export default function Checkout() {
                                     <FormInput name="driverLicense" className="text-base" placeholder="Водительское удостоверение" />
                                 </div>
                             </WhiteBlock>
+
+                            <WhiteBlock>
+                                
+                            </WhiteBlock>
                         </div>
 
                         <div className="w-[450px]">
@@ -85,7 +126,7 @@ export default function Checkout() {
                                     <span className="font-bold text-lg">${order?.services.reduce((acc, service) => acc + service.price, 0)}</span>
                                 </div>
 
-                                <Button type="submit" className="w-full h-14 rounded-2xl mt-6 text-base font-bold">Перейти к оплате</Button>
+                                <Button type="submit" className="w-full h-14 rounded-2xl mt-6 text-base font-bold" loading={submitting}>Перейти к оплате</Button>
                             </WhiteBlock>
                         </div>
                     </div>
