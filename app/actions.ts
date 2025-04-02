@@ -8,7 +8,14 @@ import { OrderStatus, Prisma } from "@prisma/client";
 import { hashSync } from "bcrypt";
 import { cookies } from "next/headers";
 
-export async function createOrder(data: CheckoutFormValues) {
+type orderType = CheckoutFormValues & {
+    carId: number;
+    totalAmount: number;
+    startDate: Date;
+    endDate: Date;
+};
+
+export async function createOrder(data: orderType) {
     try {
         console.log(data);
         const cookiesList = cookies();
@@ -24,12 +31,15 @@ export async function createOrder(data: CheckoutFormValues) {
                 fullName: data.firstName + " " + data.lastName,
                 email: data.email,
                 phone: data.phone,
-                totalAmount: 100,
+                totalAmount: data.totalAmount,
                 status: OrderStatus.PENDING,
                 items: [],
                 address: '',
                 comment: '',
                 userId: 1,
+                vehicleId: data.carId,
+                startDate: data.startDate,
+                endDate: data.endDate,
             }
         });
 
@@ -108,7 +118,7 @@ export async function registerUser(body: Prisma.UserCreateInput) {
                 fullName: body.fullName,
                 email: body.email,
                 password: hashSync(body.password as string, 10),
-                
+
             }
         });
 

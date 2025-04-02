@@ -8,6 +8,7 @@ import { Button } from "@/shared/components/ui";
 import { signIn } from "next-auth/react";
 import toast from 'react-hot-toast';
 import { registerUser } from "@/app/actions";
+import { DialogTitle } from "@/shared/components/ui/dialog";
 
 interface Props {
     onClose?: VoidFunction;
@@ -26,11 +27,17 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
 
     const onSubmit = async (data: TFormRegisterValues) => {
         try {
-            await registerUser({
-                email: data.email,
-                fullName: data.fullName,
-                password: data.password,
-            })
+            await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fullName: data.fullName,
+                    email: data.email,
+                    password: data.password,
+                }),
+            });
 
             const resp = await signIn('credentials', {
                 ...data, redirect: false
@@ -54,6 +61,7 @@ export const RegisterForm: React.FC<Props> = ({ onClose }) => {
             <form className="flex flex-col gap-5" onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex justify-between items-center">
                     <div className="mr-2">
+                        <DialogTitle></DialogTitle>
                         <Title text="Регистрация аккаунта" size="md" className="font-bold" />
                         <p className="text-gray-400">Введите данные для регистрации</p>
                     </div>

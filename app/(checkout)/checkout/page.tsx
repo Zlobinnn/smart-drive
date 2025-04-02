@@ -17,13 +17,14 @@ import { useSession } from "next-auth/react";
 import { Api } from "@/shared/services/api-client";
 import { useServices } from "@/shared/hooks/use-services";
 import { useSet } from "react-use";
+import { start } from "repl";
 
 export default function Checkout() {
     const [submitting, setSubmitting] = React.useState(false);
-    const { order } = useOrderStore();
+    const { order, selectedRange } = useOrderStore();
     const { data: session } = useSession();
     const [selectedServices, { toggle: setSelectedServices }] = useSet(new Set<number>([]));
-    const {services, loading} = useServices();
+    const { services, loading } = useServices();
 
     const selectedServicesArray = services!.filter((service) => selectedServices.has(service.id));
     const totalServicesPrice = services!.reduce((acc, service) => acc + (selectedServices.has(service.id) ? service.price : 0), 0);
@@ -57,7 +58,15 @@ export default function Checkout() {
     const onSubmit: SubmitHandler<CheckoutFormValues> = async (data) => {
         try {
             setSubmitting(true);
-            const url = await createOrder(data);
+
+            const orderData = {
+                ...data,
+                carId: order!.car.id,
+                totalAmount: order!.car.price*selectedRange.days + totalServicesPrice,
+                startDate: selectedRange.start!,
+                endDate: selectedRange.end!,
+            }
+            const url = await createOrder(orderData);
 
             toast.error("Заказ успешно создан", { icon: "✅" });
 
@@ -83,12 +92,31 @@ export default function Checkout() {
                         <div className="flex flex-col gap-10 flex-1 mb-20">
                             <WhiteBlock title="1. Информация о заказе">
                                 {order ? (
-                                    <div className="flex gap-4">
-                                        <img src={order.car.imageUrl} alt={order.car.name} className="w-24 h-16 object-cover rounded-lg" />
-                                        <div>
-                                            <p className="font-bold text-lg">{order.car.name}</p>
-                                            <p className="text-gray-500">Стоимость: ${order.car.price}</p>
+                                    <div className="flex items-center gap-20">
+                                        {/* Левая часть: изображение и информация о машине */}
+                                        <div className="flex gap-4 items-center">
+                                            <img
+                                                src={order.car.imageUrl}
+                                                alt={order.car.name}
+                                                className="w-32 h-24 object-contain rounded-lg" // Увеличиваем размер картинки
+                                            />
+                                            <div>
+                                                <p className="font-bold text-lg">{order.car.name}</p>
+                                                <p className="text-gray-500">Стоимость за сутки: ${order.car.price}</p>
+                                            </div>
                                         </div>
+
+                                        {/* Правая часть: диапазон аренды */}
+                                        {selectedRange.start && selectedRange.end ? (
+                                            <div className="">
+                                                <p className="font-bold text-lg">Диапазон аренды:</p>
+                                                <p className="text-gray-500">
+                                                    {selectedRange.start.toLocaleDateString()} - {selectedRange.end.toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <p className="text-gray-500">Диапазон аренды не выбран</p>
+                                        )}
                                     </div>
                                 ) : (
                                     <p>Вы не выбрали машину</p>
@@ -108,7 +136,7 @@ export default function Checkout() {
 
                             <WhiteBlock title="3. Дополнительные услуги">
                                 {services?.map((service) => (
-                                    <div key={service.id} className="flex justify-between items-center mb-2">
+                                    <div key={service.id} className="flex justify-between items-center mb-4">
                                         <FilterCheckbox
                                             text={service.name}
                                             value={String(service.id)}
@@ -125,7 +153,7 @@ export default function Checkout() {
                             <WhiteBlock className="p-6 sticky top-4">
                                 <div className="flex flex-col gap-1">
                                     <span className="text-xl">Итого:</span>
-                                    <span className="text-[28px] font-extrabold">${order ? order.car.price + totalServicesPrice : 0}</span>
+                                    <span className="text-[28px] font-extrabold">${order ? order.car.price*selectedRange.days + totalServicesPrice : 0}</span>
                                 </div>
 
                                 <div className="flex my-4">
@@ -133,7 +161,7 @@ export default function Checkout() {
                                         Стоимость автомобиля:
                                         <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
                                     </span>
-                                    <span className="font-bold text-lg">${order ? order.car.price : 0}</span>
+                                    <span className="font-bold text-lg">${order ? order.car.price*selectedRange.days : 0}</span>
                                 </div>
 
                                 <div className="flex my-4">

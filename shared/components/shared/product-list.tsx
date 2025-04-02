@@ -1,9 +1,9 @@
 "use client";
 import { Category, Vehicle } from "@prisma/client";
-import React from "react";
+import React, { useMemo } from "react";
 import { ProductGroupList } from "./products-group-list";
-import { useSet } from "react-use";
 import { useFavouriteStore } from "@/shared/store/favourite";
+import { useCategoryStore } from "@/shared/store/category";
 
 interface Props {
   className?: string;
@@ -11,30 +11,39 @@ interface Props {
 }
 
 export const ProductList: React.FC<Props> = ({ className, categories }) => {
-  // const [favouriteCars, { toggle: setFavouriteCars }] = useSet(new Set<number>([]));
+  const { fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars } = useFavouriteStore();
+  const { sortType } = useCategoryStore();
 
-  // React.useEffect(() => {
-  //   console.log(favouriteCars);
-  // }, [favouriteCars]);
+  // Мемоизированная сортировка по выбранному типу
+  const sortedCategories = useMemo(() => {
+    // Если выбрана сортировка по категориям — выводим как есть
+    if (sortType === 'По категориям') return categories;
 
-  // React.useEffect(() => {
-  //   const savedFavourites = localStorage.getItem("favouriteCars");
-  //   if (savedFavourites) {
-  //     const parsedFavourites = new Set<number>(JSON.parse(savedFavourites));
-  //     parsedFavourites.forEach((id) => favouriteCars.add(id));
-  //   }
-  // }, []);
+    // Собираем все машины из всех категорий
+    const allVehicles: Vehicle[] = categories.flatMap((category) => category.vehicles);
 
-  // React.useEffect(() => {
-  //   localStorage.setItem("favouriteCars", JSON.stringify(Array.from(favouriteCars)));
-  // }, [favouriteCars]);
+    // Сортируем по цене
+    const sortedVehicles = [...allVehicles].sort((a, b) => {
+      if (sortType === 'По возрастанию цены') {
+        return a.price - b.price;
+      } else if (sortType === 'По убыванию цены') {
+        return b.price - a.price;
+      }
+      return 0;
+    });
 
-  const {fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars} = useFavouriteStore();
+    // Возвращаем один блок с названием "Все автомобили"
+    return [{
+      id: 0,
+      name: "Все автомобили",
+      vehicles: sortedVehicles
+    }];
+  }, [categories, sortType]);
 
   return (
     <div className="flex-1">
       <div className="flex flex-col gap-16">
-        {categories.map((category) => (
+        {sortedCategories.map((category) => (
           category.vehicles.length > 0 && (
             <ProductGroupList
               key={category.id}
@@ -46,8 +55,6 @@ export const ProductList: React.FC<Props> = ({ className, categories }) => {
             />
           )
         ))}
-
-
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { useSet } from "react-use";
 import React from "react";
 import { ProductList } from "@/shared/components/shared/product-list";
 import { findCars, GetSearchParams } from "@/shared/lib/find-cars";
+import { useCategoryStore } from "@/shared/store/category";
 
 export default async function Home({searchParams}: {searchParams: GetSearchParams}) {
   const categories = await findCars(searchParams);

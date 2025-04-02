@@ -7,6 +7,7 @@ import { FormInput } from "../../../form/form-input";
 import { Button } from "@/shared/components/ui";
 import { signIn } from "next-auth/react";
 import toast from 'react-hot-toast';
+import { DialogTitle } from "@/shared/components/ui/dialog";
 
 interface Props {
     onClose?: VoidFunction;
@@ -27,16 +28,16 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
                 ...data, redirect: false
             })
 
-            if (!resp?.ok){
+            if (!resp?.ok) {
                 throw Error();
             }
 
-            toast.success('Вы успешно вошли в аккаунт', {icon: '✅'});
+            toast.success('Вы успешно вошли в аккаунт', { icon: '✅' });
 
             onClose?.()
         } catch (error) {
             console.log('Error [LOGIN]', error);
-            toast.error('Не удалось войти в аккаунт', {icon: '🚨'});
+            toast.error('Не удалось войти в аккаунт', { icon: '🚨' });
         }
     };
 
@@ -45,6 +46,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
             <form className="flex flex-col gap-5" onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex justify-between items-center">
                     <div className="mr-2">
+                        <DialogTitle></DialogTitle>
                         <Title text="Вход в аккаунт" size="md" className="font-bold" />
                         <p className="text-gray-400">Введите почту и пароль для входа в аккаунт</p>
                     </div>

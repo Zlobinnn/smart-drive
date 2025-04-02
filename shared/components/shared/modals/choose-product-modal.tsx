@@ -16,6 +16,7 @@ import { useFavouriteStore } from "@/shared/store/favourite";
 import { useOrderStore } from "@/shared/store/useOrderStore";
 import { CarInfo } from "../car-info";
 import { Calendar } from "../../ui/calendar";
+import { getUserSession } from "@/shared/lib/get-user-session";
 
 interface Props {
     product: Vehicle;
@@ -28,10 +29,14 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
 
     const { fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars } = useFavouriteStore();
 
-    const { setOrder } = useOrderStore();
+    const { setOrder, selectedRange, setSelectedRange } = useOrderStore();
+
+    useEffect(() => {
+        setSelectedRange({ start: null, end: null, days: 0 });
+    }, []);
 
     const handleBooking = () => {
-    
+
         setOrder({
             car: {
                 id: product.id,
@@ -41,15 +46,13 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
             },
             totalPrice: product.price,
         });
-    
+
         router.push("/checkout");
     };
-
 
     return (
         <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
             <DialogContent className={cn("p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden", className)}>
-
                 <div className="flex flex-1">
                     <ProductImage src={product.imageUrl} />
 
@@ -62,11 +65,11 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
 
                         <p className="text-gray-400 mt-2">{product.description}</p>
 
-                        <CarInfo product={product}/>
+                        <CarInfo product={product} />
 
 
                         <div className="mt-5 flex justify-center">
-                            <Calendar className="w-full"/>
+                            <Calendar product={product} className="w-full h-[430px]" />
                         </div>
 
                         <div className="flex gap-2 mt-10">
@@ -79,8 +82,12 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                                 <Heart size={20} className={(favouriteCars.some(car => car.id === product.id)) ? "fill-red-500 text-red-500" : ""} />
                             </Button>
 
-                            <Button className="h-[55px] px-10 text-base rounded-[18px] flex-1" onClick={handleBooking}>
-                                Арендовать за ${product.price}
+                            <Button
+                                className="h-[55px] px-10 text-base rounded-[18px] flex-1"
+                                onClick={handleBooking}
+                                disabled={!selectedRange.start || !selectedRange.end || selectedRange.days === 0} // Делаем кнопку неактивной
+                            >
+                                Арендовать за ${selectedRange.days ? selectedRange.days * product.price : product.price}
                             </Button>
                         </div>
 

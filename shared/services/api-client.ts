@@ -3,6 +3,7 @@ import * as brands from './brands';
 import * as favouriteCars from './favourite';
 import * as auth from './auth';
 import * as services from './services';
+import * as orders from './orders';
 
 export const Api = {
     products,
@@ -10,4 +11,5 @@ export const Api = {
     favouriteCars,
     auth,
     services,
+    orders,
 };

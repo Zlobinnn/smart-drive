@@ -26,7 +26,7 @@ export const Header: React.FC<Props> = ({ className, isCheckout=false }) => {
             <Container className='flex items-center justify-between py-8'>
 
                 {/* Левая часть */}
-                <Link href="/">
+                <a href="/">
                     <div className="flex items-center gap-4">
                         <Image src="/logo.png" alt="Logo" width={70} height={70} />
                         <div>
@@ -34,7 +34,7 @@ export const Header: React.FC<Props> = ({ className, isCheckout=false }) => {
                             <p className="text-sm text-gray-400 leading-3">умная аренда</p>
                         </div>
                     </div>
-                </Link>
+                </a>
 
                 {!isCheckout && <div className="mx-10 flex-1">
                     <Suspense>
