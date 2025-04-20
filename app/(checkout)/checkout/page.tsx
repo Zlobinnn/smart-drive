@@ -84,7 +84,7 @@ export default function Checkout() {
 
     return (
         <Container className="mt-6">
-            <Title text="Оформление заказа" size="lg" className="font-extrabold mb-8" />
+            <Title text="Оформление бронирования" size="lg" className="font-extrabold mb-8" />
 
             <FormProvider {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>

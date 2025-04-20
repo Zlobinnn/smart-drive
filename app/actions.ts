@@ -36,7 +36,7 @@ export async function createOrder(data: orderType) {
                 items: [],
                 address: '',
                 comment: '',
-                userId: 1,
+                userId: 4,
                 vehicleId: data.carId,
                 startDate: data.startDate,
                 endDate: data.endDate,
@@ -44,24 +44,8 @@ export async function createOrder(data: orderType) {
         });
 
         // TODO: сделать создание смарт-контракта для оплаты
-        const paymentData = await createPayment({
-            amount: order.totalAmount,
-            orderId: order.id,
-            description: 'Оплата заказа №' + order.id,
-        });
 
-        if (!paymentData) {
-            throw new Error('Payment data not found');
-        }
-
-        await prisma.order.update({
-            where: { id: order.id },
-            data: {
-                paymentId: paymentData.id
-            }
-        });
-
-        return '';
+        return `/payment?orderId=${order.id}&amount=${order.totalAmount}`;
 
     } catch (error) {
 

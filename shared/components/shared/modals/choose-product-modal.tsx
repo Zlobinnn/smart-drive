@@ -11,7 +11,7 @@ import { Button } from "@/shared/components/ui";
 import { FilterCheckbox } from "../filter-checkbox";
 import { CheckboxFiltersGroup } from "../checkbox-filters-group";
 import { useSet } from "react-use";
-import { CircleDotDashed, Gauge, Heart } from "lucide-react";
+import { CircleDotDashed, Gauge, Heart, Star, User } from "lucide-react";
 import { useFavouriteStore } from "@/shared/store/favourite";
 import { useOrderStore } from "@/shared/store/useOrderStore";
 import { CarInfo } from "../car-info";
@@ -54,7 +54,25 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
         <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
             <DialogContent className={cn("p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden", className)}>
                 <div className="flex flex-1">
-                    <ProductImage src={product.imageUrl} />
+                    <div className="flex flex-1">
+                        <div className="absolute top-4 left-4 z-10 flex items-center gap-4 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                <User className="w-5 h-5 text-gray-600" />
+                            </div>
+                            <div>
+                                <p className="text-base font-semibold">ООО "Смарт-Драйв"</p>
+                                <div className="flex items-center gap-1">
+                                    {[...Array(5)].map((_, i) => (
+                                        <Star key={i} className="w-4.5 h-4.5 fill-yellow-400 text-yellow-400" />
+                                    ))}
+                                    <span className="text-sm ml-2 text-gray-600 font-medium">5.0</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <ProductImage src={product.imageUrl} />
+                    </div>
 
                     <div className="w-[490px] p-7">
 
