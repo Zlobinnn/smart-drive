@@ -13,14 +13,12 @@ const statusColors: Record<OrderStatus, string> = {
     PENDING: "bg-yellow-100 text-yellow-800",
     SUCCEDED: "bg-green-100 text-green-800",
     CANCELED: "bg-red-100 text-red-800",
-    // добавьте другие статусы по необходимости
 };
 
 const statusLabels: Record<OrderStatus, string> = {
     PENDING: "Забронирован",
     SUCCEDED: "Завершен",
     CANCELED: "Отменен",
-    // добавьте другие статусы по необходимости
 };
 
 const formatDate = (date: Date) => {

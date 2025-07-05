@@ -20,7 +20,7 @@ export const SortPopup: React.FC<Props> = ({ className }) => {
     ];
 
     const handleSelect = (option: string) => {
-        setSortType(option);  // записываем в zustand
+        setSortType(option);
         setOpen(false);
     };
 

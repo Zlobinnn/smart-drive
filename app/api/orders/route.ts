@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
 
     const products = await prisma.order.findMany({
         where: {
-            vehicleId: Number(query), // Фильтр по ID автомобиля
+            vehicleId: Number(query),
           },
           select: {
             startDate: true,

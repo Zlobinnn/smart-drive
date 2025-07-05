@@ -14,15 +14,11 @@ export const ProductList: React.FC<Props> = ({ className, categories }) => {
   const { fetchFavouriteCars, favouriteCars, loading, toggleFavouriteCars } = useFavouriteStore();
   const { sortType } = useCategoryStore();
 
-  // Мемоизированная сортировка по выбранному типу
   const sortedCategories = useMemo(() => {
-    // Если выбрана сортировка по категориям — выводим как есть
     if (sortType === 'По категориям') return categories;
 
-    // Собираем все машины из всех категорий
     const allVehicles: Vehicle[] = categories.flatMap((category) => category.vehicles);
 
-    // Сортируем по цене
     const sortedVehicles = [...allVehicles].sort((a, b) => {
       if (sortType === 'По возрастанию цены') {
         return a.price - b.price;
@@ -32,7 +28,6 @@ export const ProductList: React.FC<Props> = ({ className, categories }) => {
       return 0;
     });
 
-    // Возвращаем один блок с названием "Все автомобили"
     return [{
       id: 0,
       name: "Все автомобили",

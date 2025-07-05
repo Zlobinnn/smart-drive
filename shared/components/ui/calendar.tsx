@@ -2,7 +2,7 @@ import { useOrderStore } from "@/shared/store/useOrderStore";
 import { Vehicle, Order } from "@prisma/client";
 import React, { useState } from "react";
 import { useOrders } from "@/shared/hooks/use-orders";
-import { cn } from "@/shared/lib/utils"; // Утилита для объединения классов (если используете shadcn/ui)
+import { cn } from "@/shared/lib/utils";
 
 interface Props {
   className?: string;
@@ -137,7 +137,7 @@ export const Calendar: React.FC<Props> = ({ className, product }) => {
               />
             ))}
           {/* Скелетон дней месяца */}
-          {Array(35) // Примерно 5 недель (можно настроить под максимум дней)
+          {Array(35)
             .fill(0)
             .map((_, index) => (
               <div

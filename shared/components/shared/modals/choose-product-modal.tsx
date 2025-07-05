@@ -103,7 +103,7 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className, servic
                             <Button
                                 className="h-[55px] px-10 text-base rounded-[18px] flex-1"
                                 onClick={handleBooking}
-                                disabled={!selectedRange.start || !selectedRange.end || selectedRange.days === 0} // Делаем кнопку неактивной
+                                disabled={!selectedRange.start || !selectedRange.end || selectedRange.days === 0}
                             >
                                 Арендовать за ${selectedRange.days ? selectedRange.days * product.price : product.price}
                             </Button>

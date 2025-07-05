@@ -56,17 +56,17 @@ model Vehicle {
     brand   Brand @relation(fields: [brandId], references: [id])
     brandId Int
 
-    year         Int // Год выпуска
-    mileage      Int // Пробег (км)
-    transmission String // Тип трансмиссии: "Автомат", "Механика"
-    fuelType     String // Тип топлива: "Бензин", "Дизель", "Электро", "Гибрид"
-    engineSize   Float // Объем двигателя (литры)
-    horsepower   Int // Мощность двигателя (л.с.)
-    seats        Int // Количество мест
-    doors        Int // Количество дверей
-    driveType    String // Тип привода: "Передний", "Задний", "Полный"
-    color        String // Цвет автомобиля
-    vin          String? // VIN-код (уникальный идентификатор авто)
+    year         Int
+    mileage      Int
+    transmission String
+    fuelType     String
+    engineSize   Float
+    horsepower   Int
+    seats        Int
+    doors        Int
+    driveType    String
+    color        String
+    vin          String?
 
     isAvailable Boolean @default(true)
     status      String  @default("Parked")

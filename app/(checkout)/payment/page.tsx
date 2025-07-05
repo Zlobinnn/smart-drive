@@ -21,7 +21,6 @@ export default function PaymentPage() {
     try {
       setLoading(true);
 
-      // 🔹 Запрашиваем разрешение на подключение к кошельку
       const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
       if (!accounts.length) {
         alert("Подключение к кошельку отменено");

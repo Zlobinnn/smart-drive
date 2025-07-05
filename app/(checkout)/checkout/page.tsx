@@ -98,7 +98,7 @@ export default function Checkout() {
                                             <img
                                                 src={order.car.imageUrl}
                                                 alt={order.car.name}
-                                                className="w-32 h-24 object-contain rounded-lg" // Увеличиваем размер картинки
+                                                className="w-32 h-24 object-contain rounded-lg"
                                             />
                                             <div>
                                                 <p className="font-bold text-lg">{order.car.name}</p>

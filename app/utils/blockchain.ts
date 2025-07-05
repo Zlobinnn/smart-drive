@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
 
-const CONTRACT_ADDRESS = "0x327317F1E92d7866FAD8CA0cD32AC2a19565e6FF"; // Адрес развернутого контракта
+const CONTRACT_ADDRESS = "0x327317F1E92d7866FAD8CA0cD32AC2a19565e6FF";
 const ABI = [
   "function createOrder(uint256 orderId) external payable",
-]; // ABI контракта (выписаны только нужные методы)
+];
 
 export async function payOrder(orderId: number, amount: string) {
     if (!process.env.NEXT_PUBLIC_PROVIDER_URL || !process.env.PRIVATE_KEY) {
